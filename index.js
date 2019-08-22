@@ -1,8 +1,8 @@
 'use strict';
 
-const apiKey = /*your API key here*/
+const apiKey = '0p4JtkkN7UFM3BV9apV7REJNfKaDZNpcDxLHHlzw';
 
-const searchURL = 'https://newsapi.org/v2/everything';
+const searchURL = 'developer.nps.gov/api/v1/parks';
 
 
 function formatQueryParams(params) {
