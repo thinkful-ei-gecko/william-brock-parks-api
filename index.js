@@ -2,7 +2,7 @@
 
 const apiKey = '0p4JtkkN7UFM3BV9apV7REJNfKaDZNpcDxLHHlzw';
 
-const searchURL = 'developer.nps.gov/api/v1/parks';
+const searchURL = 'https://api.nps.gov/api/v1/parks';
 
 
 function formatQueryParams(params) {
@@ -15,40 +15,39 @@ function displayResults(responseJson, maxResults) {
   // if there are previous results, remove them
   console.log(responseJson);
   $('#results-list').empty();
+  
   // iterate through the articles array, stopping at the max number of results
-  for (let i = 0; i < responseJson.articles.length & i<maxResults ; i++){
+  for (let i = 0; i < responseJson.data.length & i<maxResults ; i++){
     // for each video object in the articles
     //array, add a list item to the results 
     //list with the article title, source, author,
     //description, and image
     $('#results-list').append(
-      `<li><h3><a href="${responseJson.articles[i].url}">${responseJson.articles[i].title}</a></h3>
-      <p>${responseJson.articles[i].source.name}</p>
-      <p>By ${responseJson.articles[i].author}</p>
-      <p>${responseJson.articles[i].description}</p>
-      <img src='${responseJson.articles[i].urlToImage}'>
+      `<li>
+      <h3>${responseJson.data[i].fullName}</h3>
+      <p>${responseJson.data[i].description}</p>
+      <a href="${responseJson.data[i].url}">${responseJson.data[i].url}</a>
       </li>`
-    )};
+    );
+  }
+
   //display the results section  
   $('#results').removeClass('hidden');
-};
+}
 
-function getNews(query, maxResults=10) {
+function getParks(query, maxResults=10) {
   const params = {
-    q: query,
-    language: "en",
+    stateCode: query,
+    language: 'en',
   };
   const queryString = formatQueryParams(params)
   const url = searchURL + '?' + queryString;
 
   console.log(url);
 
-  const options = {
-    headers: new Headers({
-      "X-Api-Key": apiKey})
-  };
+ 
 
-  fetch(url, options)
+  fetch(url)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -66,7 +65,7 @@ function watchForm() {
     event.preventDefault();
     const searchTerm = $('#js-search-term').val();
     const maxResults = $('#js-max-results').val();
-    getNews(searchTerm, maxResults);
+    getParks(searchTerm, maxResults);
   });
 }
 
